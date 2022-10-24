@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
 import chai from 'chai';
-const { expect } = chai;
+const { expect, use } = chai;
 import CarModel from '../../../models/Car.model'
 import { Model } from 'mongoose';
 import {
@@ -13,14 +13,18 @@ import {
   validID,
 } from '../../mocks/car.mock'
 
+import chaiAsPromised from 'chai-as-promised';
+
+use(chaiAsPromised)
+
 describe('Teste Model de Cars', () => {
   const carModel = new CarModel();
 
-  describe('Criação de um novo caro', () => {
-    // after(()=>{
-    //   sinon.restore();
-    // })
+  afterEach(()=>{
+    sinon.restore();
+  })
 
+  describe('Criação de um novo caro', () => {
     it('É possível adicionar um carro corretamente', async () => {
       sinon.stub(Model, 'create').resolves(carMockWithId);
       const newCar = await carModel.create(carMock);
@@ -29,10 +33,6 @@ describe('Teste Model de Cars', () => {
   })
 
   describe('Buscando apenas um carro', () => {
-    // after(()=>{
-    //   sinon.restore();
-    // })
-
     it('Buscando por um id valido', async () => {
       sinon.stub(Model, 'findOne').resolves(carMockWithId);
       const car = await carModel.readOne(validID);
@@ -40,19 +40,17 @@ describe('Teste Model de Cars', () => {
     })
 
     it('É retornado um erro ao buscar por um id invalido', async () => {
+      const findOne = sinon.spy(Model, 'findOne');
       try {
         await carModel.readOne(invalidID);
       } catch (error: any) {
+        expect(findOne.notCalled).to.be.true;
         expect(error.message).to.be.equal('InvalidMongoId');
       }
     })
   })
 
   describe('Buscando por todos os carros', () => {
-    // after(()=>{
-    //   sinon.restore();
-    // })
-
     it('É retornando um array com todos os carros',async () => {
       sinon.stub(Model, 'find').resolves(arrayCars);
       const cars = await carModel.read();
@@ -61,10 +59,6 @@ describe('Teste Model de Cars', () => {
   })
 
   describe('Edição de dados de carros', () => {
-    // after(()=>{
-    //   sinon.restore();
-    // })
-
     it('Editando corretamente os dados', async () => {
       sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockUpdateWithId);
       const car = await carModel.update(validID, carMockUpdate);
@@ -72,10 +66,12 @@ describe('Teste Model de Cars', () => {
     })
 
     it('É retornado um erro ao tentar editar um carro com id invalido', async () => {
+      const update = sinon.spy(Model, 'findByIdAndUpdate');
       try {
         await carModel.readOne(invalidID);
       } catch (error: any) {
-        expect(error.message).to.be.eq('InvalidMongoId');
+        expect(update.notCalled).to.be.true;
+        expect(error.message).to.be.equal('InvalidMongoId');
       }
     })
   })
@@ -88,9 +84,11 @@ describe('Teste Model de Cars', () => {
     })
 
     it('É retornado um erro ao tentar editar um carro com id invalido', async () => {
+      const remove = sinon.spy(Model, 'findByIdAndDelete');
       try {
         await carModel.delete(invalidID);
       } catch (error: any) {
+        expect(remove.notCalled).to.be.true;
         expect(error.message).to.be.equal('InvalidMongoId');
       }
     })
