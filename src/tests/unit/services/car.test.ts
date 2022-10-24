@@ -26,8 +26,8 @@ describe('Testes de Services de Car', () => {
   describe('Criando carro', () => {
     it('É possível criar um carro',async () => {
       sinon.stub(carModel, 'create').resolves(carMockWithId);
-      const frameCreated = await carService.create(carMock);
-			expect(frameCreated).to.be.deep.equal(carMockWithId);
+      const carCreated = await carService.create(carMock);
+			expect(carCreated).to.be.deep.equal(carMockWithId);
     })
 
     it('É retornado um erro caso algum informação obrigatória não seja passada', async () => {
