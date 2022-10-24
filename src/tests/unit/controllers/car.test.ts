@@ -4,7 +4,7 @@ const { expect } = chai;
 import { Request, Response } from 'express';
 import CarModel from '../../../models/Car.model'
 import CarService from '../../../services/Car.service';
-import CarController from '../../../controllers/car.controller';
+import CarController from '../../../controllers/Car.controller';
 import {
   carMock,
   carMockWithId,
