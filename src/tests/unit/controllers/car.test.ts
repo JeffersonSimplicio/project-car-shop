@@ -43,24 +43,24 @@ describe('Testes do Controller de car', () => {
     })
   })
 
-  // describe('Buscando apenas um carro', () => {
-  //   it('É retornando um objeto com os dados do carro',async () => {
-  //     req.params = { id: validID };
-  //     sinon.stub(carService, 'readOne').resolves(carMockWithId);
-  //     await carController.readOne(req, res);
-  //     expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
-  //     expect((res.json as sinon.SinonStub).calledWith(carMockWithId)).to.be.true;
-  //   })
-  // })
+  describe('Buscando apenas um carro', () => {
+    it('É retornando um objeto com os dados do carro',async () => {
+      req.params = { id: validID };
+      sinon.stub(carService, 'readOne').resolves(carMockWithId);
+      await carController.readOne(req, res);
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(carMockWithId)).to.be.true;
+    })
+  })
 
-  // describe('Buscando todos os carros', () => {
-  //   it('É retornando um array de objetos, com todos os carros',async () => {
-  //     sinon.stub(carService, 'read').resolves(arrayCars);
-  //     await carController.read(req, res);
-  //     expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
-  //     expect((res.json as sinon.SinonStub).calledWith(arrayCars)).to.be.true;
-  //   })
-  // })
+  describe('Buscando todos os carros', () => {
+    it('É retornando um array de objetos, com todos os carros',async () => {
+      sinon.stub(carService, 'read').resolves(arrayCars);
+      await carController.read(req, res);
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(arrayCars)).to.be.true;
+    })
+  })
 
   // describe('Editando um carro', () => {
   //   it('É retornado um objeto com os dados atualizados',async () => {
