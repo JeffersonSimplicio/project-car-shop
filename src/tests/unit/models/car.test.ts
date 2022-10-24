@@ -13,10 +13,6 @@ import {
   validID,
 } from '../../mocks/car.mock'
 
-import chaiAsPromised from 'chai-as-promised';
-
-use(chaiAsPromised)
-
 describe('Teste Model de Cars', () => {
   const carModel = new CarModel();
 
