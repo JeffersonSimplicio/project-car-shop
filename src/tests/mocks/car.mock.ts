@@ -4,6 +4,8 @@ const validID: string = '6353fbad449d70068466565c';
 
 const invalidID: string = '12idInvalido34';
 
+const nonExistentId: string = '62cf1fc6498565d94eba52cd';
+
 const carMock: ICar = {
   model: 'Honda Civic',
   color: 'Black',
@@ -55,5 +57,6 @@ export {
   carMockUpdateWithId,
   arrayCars,
   validID,
+  nonExistentId,
   invalidID,
 }
