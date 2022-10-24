@@ -62,16 +62,16 @@ describe('Testes do Controller de car', () => {
     })
   })
 
-  // describe('Editando um carro', () => {
-  //   it('É retornado um objeto com os dados atualizados',async () => {
-  //     req.params = { id: validID };
-  //     req.body = carMockUpdate;
-  //     sinon.stub(carService, 'update').resolves(carMockUpdateWithId);
-  //     await carController.update(req, res);
-  //     expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
-  //     expect((res.json as sinon.SinonStub).calledWith(carMockUpdateWithId)).to.be.true;
-  //   })
-  // })
+  describe('Editando um carro', () => {
+    it('É retornado um objeto com os dados atualizados',async () => {
+      req.params = { id: validID };
+      req.body = carMockUpdate;
+      sinon.stub(carService, 'update').resolves(carMockUpdateWithId);
+      await carController.update(req, res);
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(carMockUpdateWithId)).to.be.true;
+    })
+  })
 
   // describe.skip('Deletando um carro', () => {
   //   it('É possível deletar um carro com sucesso',async () => {
