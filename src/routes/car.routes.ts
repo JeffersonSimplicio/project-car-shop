@@ -9,6 +9,7 @@ const car = new CarModel();
 const carService = new CarService(car);
 const carController = new CarController(carService);
 
+route.get('/', (req, res) => carController.read(req, res));
 route.post('/', (req, res) => carController.create(req, res));
 route.get('/:id', (req, res) => carController.readOne(req, res));
 
