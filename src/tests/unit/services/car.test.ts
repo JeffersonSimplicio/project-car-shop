@@ -11,7 +11,7 @@ import {
   arrayCars,
   validID,
   nonExistentId,
-} from '../../mocks/car.mock'
+} from '../../mocks/car.mock';
 import { ZodError } from 'zod';
 import { ErrorTypes } from '../../../errors/catalog';
 
