@@ -68,7 +68,7 @@ describe('Teste Model de Cars', () => {
     it('É retornado um erro ao tentar editar um carro com id invalido', async () => {
       const update = sinon.spy(Model, 'findByIdAndUpdate');
       try {
-        await carModel.readOne(invalidID);
+        await carModel.update(invalidID, carMockUpdate);
       } catch (error: any) {
         expect(update.notCalled).to.be.true;
         expect(error.message).to.be.equal('InvalidMongoId');
