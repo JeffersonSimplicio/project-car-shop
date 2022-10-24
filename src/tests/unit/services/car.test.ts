@@ -31,9 +31,11 @@ describe('Testes de Services de Car', () => {
     })
 
     it('É retornado um erro caso algum informação obrigatória não seja passada', async () => {
+      const create = sinon.spy(carModel, 'create')
 			try {
 				await carService.create({});
 			} catch (err) {
+        expect(create.notCalled).to.be.true;
         expect(err).to.be.instanceOf(ZodError);
 			}
     })
@@ -72,9 +74,11 @@ describe('Testes de Services de Car', () => {
     })
 
     it('Caso o objeto passado não esteja correto um erro é disparado', async () => {
+      const update = sinon.spy(carModel, 'update')
       try {
 				await carService.update(validID, {});
 			} catch (err) {
+        expect(update.notCalled).to.be.true;
         expect(err).to.be.instanceOf(ZodError);
 			}
     })
