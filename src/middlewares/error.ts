@@ -16,7 +16,6 @@ const errorHandler: ErrorRequestHandler = (
   }
 
   const messageAsErrorType = err.message as keyof typeof ErrorTypes;
-  console.log('mensagem de erro: ', messageAsErrorType);
   
   const mappedError = errorCatalog[messageAsErrorType];
   if (mappedError) {
