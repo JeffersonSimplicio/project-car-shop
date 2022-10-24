@@ -21,11 +21,21 @@ class CarController {
   }
 
   public async read(
-    req: Request,
+    _req: Request,
     res: Response<ICar[]>,
   ) {
     const results = await this._service.read();
     return res.status(200).json(results);
+  }
+
+  public async update(
+    req: Request,
+    res: Response<ICar>,
+  ) {
+    const { id } = req.params;
+    const data = req.body as ICar;
+    const result = await this._service.update(id, data);
+    return res.status(200).json(result);
   }
 }
 
