@@ -1,7 +1,7 @@
 import * as sinon from 'sinon';
 import chai from 'chai';
 const { expect } = chai;
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import CarModel from '../../../models/Car.model'
 import CarService from '../../../services/Car.service';
 import CarController from '../../../controllers/car.controller';
@@ -12,8 +12,6 @@ import {
   carMockUpdateWithId,
   arrayCars,
   validID,
-  nonExistentId,
-  invalidID,
 } from '../../mocks/car.mock';
 
 describe('Testes do Controller de car', () => {
@@ -73,13 +71,13 @@ describe('Testes do Controller de car', () => {
     })
   })
 
-  // describe.skip('Deletando um carro', () => {
-  //   it('É possível deletar um carro com sucesso',async () => {
-  //     req.params = { id: validID };
-  //     sinon.stub(carService, 'delete').resolves();
-  //     await carController.delete(req, res);
-  //     expect((res.status as sinon.SinonStub).calledWith(204)).to.be.true;
-  //     expect((res.json as sinon.SinonStub)).to.be.undefined;
-  //   })
-  // })
+  describe('Deletando um carro', () => {
+    it('É possível deletar um carro com sucesso',async () => {
+      res.end = sinon.stub().returns(null);
+      req.params = { id: validID };
+      sinon.stub(carService, 'delete').resolves();
+      await carController.delete(req, res);
+      expect((res.status as sinon.SinonStub).calledWith(204)).to.be.true;
+    })
+  })
 });
