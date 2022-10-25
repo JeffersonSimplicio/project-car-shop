@@ -48,42 +48,109 @@ describe('Teste da rota "/cars"', () => {
     })
 
     it('Não é possível criar um novo carro, sem algum dos campos obrigatórios', async () => {
+      const tests = [{}, noModel, noColor, noBuyValue, noYear, noDoorsQty, noSeatsQty]
       const create = sinon.spy(Model, 'create');
-
-      let response = await chai.request(app).post('/cars').send({});
-      expect(response.status).to.be.equal(400);
-      expect(create.notCalled).to.be.true;
-
-
-      // Sem 'model'
-      response = await chai.request(app).post('/cars').send(noModel);
-      expect(response.status).to.be.equal(400);
-      expect(create.notCalled).to.be.true;
-
-      // Sem 'color'
-      response = await chai.request(app).post('/cars').send(noModel);
-      expect(response.status).to.be.equal(400);
-      expect(create.notCalled).to.be.true;
-
-      // Sem 'buyValue'
-      response = await chai.request(app).post('/cars').send(noBuyValue);
-      expect(response.status).to.be.equal(400);
-      expect(create.notCalled).to.be.true;
-
-      // Sem 'year'
-      response = await chai.request(app).post('/cars').send(noYear);
-      expect(response.status).to.be.equal(400);
-      expect(create.notCalled).to.be.true;
-
-      // Sem 'doorsQty'
-      response = await chai.request(app).post('/cars').send(noDoorsQty);
-      expect(response.status).to.be.equal(400);
-      expect(create.notCalled).to.be.true;
-
-      // Sem 'seatsQty'
-      response = await chai.request(app).post('/cars').send(noSeatsQty);
-      expect(response.status).to.be.equal(400);
-      expect(create.notCalled).to.be.true;
+      // forEach não funcionou
+      for (let i = 0; i < tests.length; i += 1) {
+        const response = await chai.request(app).post('/cars').send(tests[i]);
+        expect(response.status).to.be.equal(400);
+        expect(create.notCalled).to.be.true;
+      }
     })
+
+    // it('Os campos devem seguir os padrões de de valor',async () => {
+    //   const create = sinon.spy(Model, 'create');
+
+    //   // model
+    //   let response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, model: 'oi'});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, model: 8});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   // year
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, year: 1899});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, year: 2023});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, year: '2015'});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   // color
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, color: 'ab'});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, color: 12});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   // buyValue
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, buyValue: 1234.56});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, buyValue: 'texto'});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   // doorsQty
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, doorsQty: 1});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, doorsQty: 5});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   response = await chai
+    //     .request(app)
+    //     .post('/cars')
+    //     .send({ ...carMock, doorsQty: 'texto'});
+    //   expect(response.status).to.be.equal(400);
+    //   expect(create.notCalled).to.be.true;
+
+    //   // seatsQty
+    // })
   })
 })
