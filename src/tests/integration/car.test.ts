@@ -163,4 +163,18 @@ describe('Teste da rota "/cars"', () => {
         .to.be.deep.equal([]);
     })
   })
+
+  describe('Edição de carro', () => {
+    it('É possível editar um carro corretamente', async () => {
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockUpdateWithId);
+      const response = await chai
+        .request(app)
+        .put(`/cars/${validID}`)
+        .send(carMockUpdate);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(carMockUpdateWithId);
+    })
+  })
 })
