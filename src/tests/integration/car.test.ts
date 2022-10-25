@@ -29,8 +29,8 @@ const { buyValue, ...noBuyValue} = carMock;
 const { doorsQty, ...noDoorsQty} = carMock;
 const { seatsQty, ...noSeatsQty} = carMock;
 
-const InvalidMongoId = { error: 'Id must have 24 hexadecimal characters' };
-const EntityNotFound = { error: 'Object not found' };
+const invalidMongoId = { error: 'Id must have 24 hexadecimal characters' };
+const entityNotFound = { error: 'Object not found' };
 
 describe('Teste da rota "/cars"', () => {
   afterEach(()=>{
@@ -124,8 +124,19 @@ describe('Teste da rota "/cars"', () => {
       expect(response.status).to.be.equal(400);
       expect(response.body)
         .to.be.an('object')
-        .to.be.deep.equal(InvalidMongoId);
+        .to.be.deep.equal(invalidMongoId);
       expect(findOne.notCalled).to.be.true;
+    })
+
+    it('Caso não exista a um carro correspondente ao id, é retornado uma mensagem de erro', async () => {
+      sinon.stub(Model, 'findOne').resolves(null);
+      const response = await chai
+        .request(app)
+        .get(`/cars/${nonExistentId}`);
+      expect(response.status).to.be.equal(404);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(entityNotFound);
     })
   })
 })
