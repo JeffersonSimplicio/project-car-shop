@@ -17,6 +17,7 @@ import {
   invalidID,
   validID,
 } from '../mocks/car.mock'
+import { clear } from 'console';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -27,6 +28,9 @@ const { color, ...noColor} = carMock;
 const { buyValue, ...noBuyValue} = carMock;
 const { doorsQty, ...noDoorsQty} = carMock;
 const { seatsQty, ...noSeatsQty} = carMock;
+
+const InvalidMongoId = { error: 'Id must have 24 hexadecimal characters' };
+const EntityNotFound = { error: 'Object not found' };
 
 describe('Teste da rota "/cars"', () => {
   afterEach(()=>{
@@ -64,6 +68,26 @@ describe('Teste da rota "/cars"', () => {
       {buyValue: 'texto'}, {doorsQty: 1}, {doorsQty: 5}, {doorsQty: 2.6},
       {doorsQty: 'texto'}, {seatsQty: 1}, {seatsQty: 8}, {seatsQty: 2.6},
       {seatsQty: 'texto'}];
+
+      const erroMessageTest = [
+        'Should be at least 3 characters',
+        'Expected string, received number',
+        'Value should be greater than or equal to 1900',
+        'Value should be less than or equal to 2022',
+        'Expected number, received string',
+        'Should be at least 3 characters',
+        'Expected string, received number',
+        'Expected integer, received float',
+        'Expected number, received string',
+        'Value should be greater than or equal to 2',
+        'Value should be less than or equal to 4',
+        'Expected integer, received float',
+        'Expected number, received string',
+        'Value should be greater than or equal to 2',
+        'Value should be less than or equal to 7',
+        'Expected integer, received float',
+        'Expected number, received string'
+      ]
       const create = sinon.spy(Model, 'create');
 
       for(let i = 0; i < tests.length; i += 1) {
@@ -72,8 +96,24 @@ describe('Teste da rota "/cars"', () => {
           .post('/cars')
           .send({ ...carMock, ...tests[i]});
         expect(response.status).to.be.equal(400);
-        expect(create.notCalled).to.be.true
+        const erroMessage = response.body.error[0].message;  
+        expect(typeof(erroMessage) === 'string').to.be.true;
+        expect(erroMessage).to.be.equal(erroMessageTest[i]);
+        expect(create.notCalled).to.be.true;
       }
+    })
+  })
+
+  describe('Possível pegar um carro', () => {
+    it('É retornado um carro correspondente ao id passado', async () => {
+      sinon.stub(Model, 'findOne').resolves(carMockWithId);
+      const response = await chai
+        .request(app)
+        .get(`/cars/${validID}`);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(carMockWithId);
     })
   })
 })
