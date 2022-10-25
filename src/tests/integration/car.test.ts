@@ -115,5 +115,17 @@ describe('Teste da rota "/cars"', () => {
         .to.be.an('object')
         .to.be.deep.equal(carMockWithId);
     })
+
+    it('Ao passar o id errado é retornado uma mensagem de erro', async () => {
+      const findOne = sinon.spy(Model, 'findOne');
+      const response = await chai
+        .request(app)
+        .get(`/cars/${invalidID}`);
+      expect(response.status).to.be.equal(400);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(InvalidMongoId);
+      expect(findOne.notCalled).to.be.true;
+    })
   })
 })
