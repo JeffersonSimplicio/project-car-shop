@@ -51,106 +51,29 @@ describe('Teste da rota "/cars"', () => {
       const tests = [{}, noModel, noColor, noBuyValue, noYear, noDoorsQty, noSeatsQty]
       const create = sinon.spy(Model, 'create');
       // forEach não funcionou
-      for (let i = 0; i < tests.length; i += 1) {
+      for(let i = 0; i < tests.length; i += 1) {
         const response = await chai.request(app).post('/cars').send(tests[i]);
         expect(response.status).to.be.equal(400);
         expect(create.notCalled).to.be.true;
       }
     })
 
-    // it('Os campos devem seguir os padrões de de valor',async () => {
-    //   const create = sinon.spy(Model, 'create');
+    it('Os campos devem seguir os padrões de valor',async () => {
+      const tests = [{model: 'oi'}, {model: 8}, {year: 1899}, {year: 2023},
+      {year: '2015'}, {color: 'ab'}, {color: 12}, {buyValue: 1234.56},
+      {buyValue: 'texto'}, {doorsQty: 1}, {doorsQty: 5}, {doorsQty: 2.6},
+      {doorsQty: 'texto'}, {seatsQty: 1}, {seatsQty: 8}, {seatsQty: 2.6},
+      {seatsQty: 'texto'}];
+      const create = sinon.spy(Model, 'create');
 
-    //   // model
-    //   let response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, model: 'oi'});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, model: 8});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   // year
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, year: 1899});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, year: 2023});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, year: '2015'});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   // color
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, color: 'ab'});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, color: 12});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   // buyValue
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, buyValue: 1234.56});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, buyValue: 'texto'});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   // doorsQty
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, doorsQty: 1});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, doorsQty: 5});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   response = await chai
-    //     .request(app)
-    //     .post('/cars')
-    //     .send({ ...carMock, doorsQty: 'texto'});
-    //   expect(response.status).to.be.equal(400);
-    //   expect(create.notCalled).to.be.true;
-
-    //   // seatsQty
-    // })
+      for(let i = 0; i < tests.length; i += 1) {
+        const response = await chai
+          .request(app)
+          .post('/cars')
+          .send({ ...carMock, ...tests[i]});
+        expect(response.status).to.be.equal(400);
+        expect(create.notCalled).to.be.true
+      }
+    })
   })
 })
