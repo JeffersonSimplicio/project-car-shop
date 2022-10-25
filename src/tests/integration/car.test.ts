@@ -139,4 +139,17 @@ describe('Teste da rota "/cars"', () => {
         .to.be.deep.equal(entityNotFound);
     })
   })
+
+  describe('Pegando todos os carros', () => {
+    it('É retornado um array com todos os carros', async () => {
+      sinon.stub(Model, 'find').resolves(arrayCars);
+      const response = await chai
+        .request(app)
+        .get(`/cars`);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('array')
+        .to.be.deep.equal(arrayCars);
+    })
+  })
 })
