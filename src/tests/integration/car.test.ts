@@ -151,5 +151,16 @@ describe('Teste da rota "/cars"', () => {
         .to.be.an('array')
         .to.be.deep.equal(arrayCars);
     })
+
+    it('Caso não haja nenhum carro cadastrado, é retornado um array vazio', async () => {
+      sinon.stub(Model, 'find').resolves([]);
+      const response = await chai
+        .request(app)
+        .get(`/cars`);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('array')
+        .to.be.deep.equal([]);
+    })
   })
 })
