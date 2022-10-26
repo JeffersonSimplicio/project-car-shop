@@ -252,5 +252,17 @@ describe('Teste da rota "/cars"', () => {
         .to.be.an('object')
         .to.be.deep.equal(entityNotFound);
     })
+
+    it('Ao passar o id errado é retornado uma mensagem de erro', async () => {
+      const remove = sinon.spy(Model, 'findByIdAndDelete');
+      const response = await chai
+        .request(app)
+        .delete(`/cars/${invalidID}`);
+      expect(response.status).to.be.equal(400);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(invalidMongoId);
+      expect(remove.notCalled).to.be.true;
+    })
   })
 })
