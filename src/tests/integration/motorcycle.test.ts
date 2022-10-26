@@ -101,4 +101,64 @@ describe('Teste da rota "/motorcycles"', () => {
       }
     })
   })
+
+  describe('Possível pegar uma única moto', () => {
+    it('É retornado uma moto correspondente ao id passado', async () => {
+      sinon.stub(Model, 'findOne').resolves(motorcycleMockWithId);
+      const response = await chai
+        .request(app)
+        .get(`/motorcycles/${validID}`);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(motorcycleMockWithId);
+    })
+
+    it('Ao passar o id errado é retornado uma mensagem de erro', async () => {
+      const findOne = sinon.spy(Model, 'findOne');
+      const response = await chai
+        .request(app)
+        .get(`/motorcycles/${invalidID}`);
+      expect(response.status).to.be.equal(400);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(invalidMongoId);
+      expect(findOne.notCalled).to.be.true;
+    })
+
+    it('Caso não exista a uma moto correspondente ao id, é retornado uma mensagem de erro', async () => {
+      sinon.stub(Model, 'findOne').resolves(null);
+      const response = await chai
+        .request(app)
+        .get(`/motorcycles/${nonExistentId}`);
+      expect(response.status).to.be.equal(404);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(entityNotFound);
+    })
+  })
+
+  describe('Pegando todas as motos', () => {
+    it('É retornado um array com todas as motos', async () => {
+      sinon.stub(Model, 'find').resolves(arrayMotorcycles);
+      const response = await chai
+        .request(app)
+        .get(`/motorcycles`);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('array')
+        .to.be.deep.equal(arrayMotorcycles);
+    })
+
+    it('Caso não haja nenhuma moto cadastrada, é retornado um array vazio', async () => {
+      sinon.stub(Model, 'find').resolves([]);
+      const response = await chai
+        .request(app)
+        .get(`/motorcycles`);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('array')
+        .to.be.deep.equal([]);
+    })
+  })
 })
