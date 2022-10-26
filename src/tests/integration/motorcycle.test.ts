@@ -75,7 +75,6 @@ describe('Teste da rota "/motorcycles"', () => {
 
     it('Não é possível criar uma moto, sem algum dos campos obrigatórios', async () => {
       const create = sinon.spy(Model, 'create');
-      // forEach não funcionou
       for(let i = 0; i < incompleteMocks.length; i += 1) {
         const response = await chai
           .request(app)
@@ -212,6 +211,18 @@ describe('Teste da rota "/motorcycles"', () => {
         expect(typeof(erroMessage) === 'string').to.be.true;
         expect(erroMessage).to.be.equal(erroMessageTest[i]);
         expect(update.notCalled).to.be.true;
+      }
+    })
+
+    it('Não é possível editar uma nova moto sem algum dos campos obrigatórios', async () => {
+      const create = sinon.spy(Model, 'create');
+      for(let i = 0; i < incompleteMocks.length; i += 1) {
+        const response = await chai
+          .request(app)
+          .post('/motorcycles')
+          .send(incompleteMocks[i]);
+        expect(response.status).to.be.equal(400);
+        expect(create.notCalled).to.be.true;
       }
     })
   })
