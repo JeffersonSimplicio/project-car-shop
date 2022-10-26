@@ -32,12 +32,12 @@ const { seatsQty, ...noSeatsQty} = carMock;
 const invalidMongoId = { error: 'Id must have 24 hexadecimal characters' };
 const entityNotFound = { error: 'Object not found' };
 
-const tests = [{model: 'oi'}, {model: 8}, {year: 1899}, {year: 2023},
+const dataTests = [{model: 'oi'}, {model: 8}, {year: 1899}, {year: 2023},
 {year: '2015'}, {color: 'ab'}, {color: 12}, {buyValue: 1234.56},
 {buyValue: 'texto'}, {doorsQty: 1}, {doorsQty: 5}, {doorsQty: 2.6},
 {doorsQty: 'texto'}, {seatsQty: 1}, {seatsQty: 8}, {seatsQty: 2.6},
 {seatsQty: 'texto'}];
-
+const incompleteMocks = [{}, noModel, noColor, noBuyValue, noYear, noDoorsQty, noSeatsQty]
 const erroMessageTest = [
   'Should be at least 3 characters',
   'Expected string, received number',
@@ -78,11 +78,13 @@ describe('Teste da rota "/cars"', () => {
     })
 
     it('Não é possível criar um novo carro, sem algum dos campos obrigatórios', async () => {
-      const tests = [{}, noModel, noColor, noBuyValue, noYear, noDoorsQty, noSeatsQty]
       const create = sinon.spy(Model, 'create');
       // forEach não funcionou
-      for(let i = 0; i < tests.length; i += 1) {
-        const response = await chai.request(app).post('/cars').send(tests[i]);
+      for(let i = 0; i < incompleteMocks.length; i += 1) {
+        const response = await chai
+          .request(app)
+          .post('/cars')
+          .send(incompleteMocks[i]);
         expect(response.status).to.be.equal(400);
         expect(create.notCalled).to.be.true;
       }
@@ -90,11 +92,11 @@ describe('Teste da rota "/cars"', () => {
 
     it('Os campos devem seguir os padrões de valor',async () => {
       const create = sinon.spy(Model, 'create');
-      for(let i = 0; i < tests.length; i += 1) {
+      for(let i = 0; i < dataTests.length; i += 1) {
         const response = await chai
           .request(app)
           .post('/cars')
-          .send({ ...carMock, ...tests[i]});
+          .send({ ...carMock, ...dataTests[i]});
         expect(response.status).to.be.equal(400);
         const erroMessage = response.body.error[0].message;  
         expect(typeof(erroMessage) === 'string').to.be.true;
@@ -187,6 +189,34 @@ describe('Teste da rota "/cars"', () => {
       expect(response.body)
         .to.be.an('object')
         .to.be.deep.equal(entityNotFound);
+    })
+
+    it('Os campos devem seguir os padrões de valor', async () => {
+      const update = sinon.spy(Model, 'findByIdAndUpdate');
+      for(let i = 0; i < dataTests.length; i += 1) {
+        const response = await chai
+          .request(app)
+          .put(`/cars/${validID}`)
+          .send({ ...carMock, ...dataTests[i]});
+        expect(response.status).to.be.equal(400);
+        const erroMessage = response.body.error[0].message;  
+        expect(typeof(erroMessage) === 'string').to.be.true;
+        expect(erroMessage).to.be.equal(erroMessageTest[i]);
+        expect(update.notCalled).to.be.true;
+      }
+    })
+
+    it('Não é possível criar um novo carro, sem algum dos campos obrigatórios', async () => {
+      const create = sinon.spy(Model, 'create');
+      // forEach não funcionou
+      for(let i = 0; i < incompleteMocks.length; i += 1) {
+        const response = await chai
+          .request(app)
+          .post('/cars')
+          .send(incompleteMocks[i]);
+        expect(response.status).to.be.equal(400);
+        expect(create.notCalled).to.be.true;
+      }
     })
   })
 })
