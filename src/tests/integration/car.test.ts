@@ -241,5 +241,16 @@ describe('Teste da rota "/cars"', () => {
         .delete(`/cars/${validID}`);
       expect(response.status).to.be.equal(204);
     })
+
+    it('É retornado um erro caso não tenha um carro correspondência', async () => {
+      sinon.stub(Model, 'findByIdAndDelete').resolves(null);
+      const response = await chai
+        .request(app)
+        .delete(`/cars/${nonExistentId}`);
+      expect(response.status).to.be.equal(404);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(entityNotFound);
+    })
   })
 })
