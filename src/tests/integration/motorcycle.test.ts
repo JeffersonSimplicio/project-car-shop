@@ -226,4 +226,37 @@ describe('Teste da rota "/motorcycles"', () => {
       }
     })
   })
+
+  describe('Deletando uma moto', () => {
+    it('É possível deletar uma moto corretamente', async () => {
+      sinon.stub(Model, 'findByIdAndDelete').resolves(motorcycleMockWithId);
+      const response = await chai
+        .request(app)
+        .delete(`/motorcycles/${validID}`);
+      expect(response.status).to.be.equal(204);
+    })
+
+    it('É retornado um erro caso não tenha uma moto correspondente', async () => {
+      sinon.stub(Model, 'findByIdAndDelete').resolves(null);
+      const response = await chai
+        .request(app)
+        .delete(`/motorcycles/${nonExistentId}`);
+      expect(response.status).to.be.equal(404);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(entityNotFound);
+    })
+
+    it('Ao passar o id errado é retornado uma mensagem de erro', async () => {
+      const remove = sinon.spy(Model, 'findByIdAndDelete');
+      const response = await chai
+        .request(app)
+        .delete(`/motorcycles/${invalidID}`);
+      expect(response.status).to.be.equal(400);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(invalidMongoId);
+      expect(remove.notCalled).to.be.true;
+    })
+  })
 })
