@@ -4,7 +4,6 @@ import chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import 'dotenv/config';
-import { Response } from 'superagent';
 import app from '../../app';
 import { Model } from 'mongoose';
 import {
@@ -17,7 +16,6 @@ import {
   invalidID,
   validID,
 } from '../mocks/car.mock'
-import { clear } from 'console';
 
 chai.use(chaiHttp);
 const { expect } = chai;
