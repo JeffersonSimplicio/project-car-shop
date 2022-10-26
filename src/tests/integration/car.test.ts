@@ -219,4 +219,14 @@ describe('Teste da rota "/cars"', () => {
       }
     })
   })
+
+  describe('Deletando um carro', () => {
+    it('É possível deletar um carro corretamente', async () => {
+      sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId);
+      const response = await chai
+        .request(app)
+        .delete(`/cars/${validID}`);
+      expect(response.status).to.be.equal(204);
+    })
+  })
 })
