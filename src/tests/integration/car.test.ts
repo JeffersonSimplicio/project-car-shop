@@ -191,6 +191,19 @@ describe('Teste da rota "/cars"', () => {
         .to.be.deep.equal(entityNotFound);
     })
 
+    it('Ao passar o id errado é retornado uma mensagem de erro', async () => {
+      const update = sinon.spy(Model, 'findByIdAndUpdate');
+      const response = await chai
+        .request(app)
+        .put(`/cars/${invalidID}`)
+        .send(carMockUpdate);
+      expect(response.status).to.be.equal(400);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(invalidMongoId);
+      expect(update.notCalled).to.be.true;
+    })
+
     it('Os campos devem seguir os padrões de valor', async () => {
       const update = sinon.spy(Model, 'findByIdAndUpdate');
       for(let i = 0; i < dataTests.length; i += 1) {
