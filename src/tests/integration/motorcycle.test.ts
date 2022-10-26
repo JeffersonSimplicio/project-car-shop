@@ -174,5 +174,17 @@ describe('Teste da rota "/motorcycles"', () => {
         .to.be.an('object')
         .to.be.deep.equal(motorcycleMockUpdateWithId);
     })
+
+    it('É retornado um erro caso não tenha uma moto com correspondência', async () => {
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(null);
+      const response = await chai
+        .request(app)
+        .put(`/motorcycles/${nonExistentId}`)
+        .send(motorcycleMockUpdate);
+      expect(response.status).to.be.equal(404);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(entityNotFound);
+    })
   })
 })
