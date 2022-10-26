@@ -56,5 +56,18 @@ describe.only('Teste da rota "/motorcycles"', () => {
         .to.be.an('object')
         .and.to.deep.equal(motorcycleMockWithId);
     })
+
+    it('Não é possível criar uma moto, sem algum dos campos obrigatórios', async () => {
+      const create = sinon.spy(Model, 'create');
+      // forEach não funcionou
+      for(let i = 0; i < incompleteMocks.length; i += 1) {
+        const response = await chai
+          .request(app)
+          .post('/motorcycles')
+          .send(incompleteMocks[i]);
+        expect(response.status).to.be.equal(400);
+        expect(create.notCalled).to.be.true;
+      }
+    })
   })
 })
