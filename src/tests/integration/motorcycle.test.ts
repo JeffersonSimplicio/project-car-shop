@@ -199,5 +199,20 @@ describe('Teste da rota "/motorcycles"', () => {
         .to.be.deep.equal(invalidMongoId);
       expect(update.notCalled).to.be.true;
     })
+
+    it('Os campos devem seguir os padrões de valor', async () => {
+      const update = sinon.spy(Model, 'findByIdAndUpdate');
+      for(let i = 0; i < dataTests.length; i += 1) {
+        const response = await chai
+          .request(app)
+          .put(`/motorcycles/${validID}`)
+          .send({ ...motorcycleMock, ...dataTests[i]});
+        expect(response.status).to.be.equal(400);
+        const erroMessage = response.body.error[0].message;  
+        expect(typeof(erroMessage) === 'string').to.be.true;
+        expect(erroMessage).to.be.equal(erroMessageTest[i]);
+        expect(update.notCalled).to.be.true;
+      }
+    })
   })
 })
