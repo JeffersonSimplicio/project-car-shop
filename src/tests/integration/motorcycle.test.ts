@@ -54,7 +54,7 @@ const erroMessageTest = [
   'Expected number, received string'
 ];
 
-describe.only('Teste da rota "/motorcycles"', () => {
+describe('Teste da rota "/motorcycles"', () => {
   afterEach(()=>{
     sinon.restore();
   })
