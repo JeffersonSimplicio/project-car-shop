@@ -186,5 +186,18 @@ describe('Teste da rota "/motorcycles"', () => {
         .to.be.an('object')
         .to.be.deep.equal(entityNotFound);
     })
+
+    it('Ao passar o id errado é retornado uma mensagem de erro', async () => {
+      const update = sinon.spy(Model, 'findByIdAndUpdate');
+      const response = await chai
+        .request(app)
+        .put(`/motorcycles/${invalidID}`)
+        .send(motorcycleMockUpdate);
+      expect(response.status).to.be.equal(400);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(invalidMongoId);
+      expect(update.notCalled).to.be.true;
+    })
   })
 })
