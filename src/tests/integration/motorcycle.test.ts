@@ -161,4 +161,18 @@ describe('Teste da rota "/motorcycles"', () => {
         .to.be.deep.equal([]);
     })
   })
+
+  describe('Edição de moto', () => {
+    it('É possível editar uma moto corretamente', async () => {
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(motorcycleMockUpdateWithId);
+      const response = await chai
+        .request(app)
+        .put(`/motorcycles/${validID}`)
+        .send(motorcycleMockUpdate);
+      expect(response.status).to.be.equal(200);
+      expect(response.body)
+        .to.be.an('object')
+        .to.be.deep.equal(motorcycleMockUpdateWithId);
+    })
+  })
 })
